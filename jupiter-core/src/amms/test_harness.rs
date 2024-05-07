@@ -64,7 +64,12 @@ lazy_static! {
         (constants::USDC_MINT, 1_110_000_000),
         (constants::USDT_MINT, 1_110_000_000),
     ];
-    pub static ref TOKEN2022_MINT_AND_IN_AMOUNT: [(Pubkey, u64); 0] = [];
+    pub static ref TOKEN2022_MINT_AND_IN_AMOUNT: [(Pubkey, u64); 1] = [
+        (
+            pubkey!("inTCqHJaLAETUxvRZ2kC45G2sThq9BFWVimfaQw7t6w"),
+            1_000_000_000
+        )
+    ];
     pub static ref TOKEN_MINT_TO_IN_AMOUNT: HashMap<Pubkey, u64> = {
         let mut m = HashMap::from(*TOKEN_MINT_AND_IN_AMOUNT);
         m.extend(HashMap::from(*TOKEN2022_MINT_AND_IN_AMOUNT));
