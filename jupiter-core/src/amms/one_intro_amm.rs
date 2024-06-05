@@ -62,10 +62,14 @@ impl Amm for OneIntroAmm {
     }
 
     fn get_accounts_to_update(&self) -> Vec<Pubkey> {
-        Vec::new()
+        vec![self.key]
     }
 
     fn update(&mut self, _account_map: &AccountMap) -> Result<()> {
+        let account = _account_map.get(&self.key).context("Pool state not found.")?;
+
+        self.state = PoolState::deserialize(&mut &account.data[8..])?;
+
         Ok(())
     }
 

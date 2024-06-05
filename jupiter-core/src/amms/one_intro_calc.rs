@@ -19,7 +19,14 @@ pub fn proportional(amount: u64, numerator: u64, denominator: u64) -> anchor_lan
     if denominator == 0 {
         return Ok(amount);
     }
-    u64::try_from((amount as u128).checked_mul(numerator as u128).unwrap().checked_div(denominator as u128).unwrap()).map_err(|_| ErrorCode::CalculationFailure.into())
+
+    let value = (amount as u128)
+        .checked_mul(numerator as u128)
+        .ok_or::<anchor_lang::error::Error>(ErrorCode::CalculationFailure.into())?
+        .checked_div(denominator as u128)
+        .ok_or::<anchor_lang::error::Error>(ErrorCode::CalculationFailure.into())?;
+
+    u64::try_from(value).map_err(|_| ErrorCode::CalculationFailure.into())
 }
 
 pub fn value_from_shares(shares: u64, total_value: u64, total_shares: u64) -> anchor_lang::Result<u64> {
