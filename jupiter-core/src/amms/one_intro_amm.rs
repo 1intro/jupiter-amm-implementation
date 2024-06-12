@@ -11,6 +11,7 @@ use super::{one_intro_calc::{calc_in_given_out, calc_out_given_in, value_from_sh
 pub const ONE_INTRO_PROGRAM_ID: Pubkey = pubkey!("DEXYosS6oEGvk8uCDayvwEZz4qEyDJRf9nFgYCaqPMTm");
 
 const ONE_INTRO_METADATA_STATE: Pubkey = pubkey!("5nmAbnjJfW1skrPvYjLTBNdhoKzJfznnbvDcM8G2U7Ki");
+const ONE_INTRO_TOKEN_AUTH_PDA: Pubkey = pubkey!("ATowQwFzdJBJ9VFSfoNKmuB8GiSeo8foM5vRriwmKmFB");
 
 pub struct OneIntroAmm {
     key: Pubkey,
@@ -131,7 +132,7 @@ impl Amm for OneIntroAmm {
             };
 
         let user = swap_params.token_transfer_authority;
-        let ata_metadata_swap_fee = get_associated_token_address(&user, &swap_params.source_mint);
+        let ata_metadata_swap_fee = get_associated_token_address(&ONE_INTRO_TOKEN_AUTH_PDA, &swap_params.source_mint);
 
         Ok(SwapAndAccountMetas {
             swap: Swap::TokenSwap, // TODO How to add 1INTRO to Swap enum?
