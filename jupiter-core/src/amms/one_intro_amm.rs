@@ -6,7 +6,7 @@ use rust_decimal::Decimal;
 use solana_sdk::{instruction::AccountMeta, pubkey, pubkey::Pubkey};
 use spl_associated_token_account::get_associated_token_address;
 
-use super::{one_intro_calc::{calc_in_given_out, calc_out_given_in, value_from_shares, MAX_IN_RATIO, MAX_OUT_RATIO, PONE}, one_intro_state::PoolState};
+use super::{one_intro_calc::{calc_in_given_out, calc_out_given_in, value_from_shares, ErrorCode, MAX_IN_RATIO, MAX_OUT_RATIO, PONE}, one_intro_state::PoolState};
 
 pub const ONE_INTRO_PROGRAM_ID: Pubkey = pubkey!("DEXYosS6oEGvk8uCDayvwEZz4qEyDJRf9nFgYCaqPMTm");
 
@@ -75,6 +75,10 @@ impl Amm for OneIntroAmm {
     }
 
     fn quote(&self, quote_params: &QuoteParams) -> Result<Quote> {
+        if quote_params.amount <= 0 {
+            Err(ErrorCode::ValidationTooSmallTokenInAmount.into())
+        }
+
         let record_0 = &self.state.pool_token_array[0];
         let record_1 = &self.state.pool_token_array[1];
         let swap_fee_ratio = self.state.pool_swap_fee_ratio;
@@ -108,6 +112,10 @@ impl Amm for OneIntroAmm {
                 )?
             },
         };
+
+        if out_amount <= 0 {
+            Err(ErrorCode::ValidationTooSmallTokenOutAmount.into())
+        }
 
         Ok(Quote {
             in_amount,

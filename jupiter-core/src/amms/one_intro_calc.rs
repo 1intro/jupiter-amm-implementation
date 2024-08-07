@@ -11,6 +11,12 @@ pub enum ErrorCode {
     #[msg("Calculation: general failure")]
     CalculationFailure,
 
+    #[msg("Transaction Failed: Unable to calculate input token amount. Please retry.")]
+    ValidationTooSmallTokenInAmount,
+
+    #[msg("Transaction Failed: Slippage too low or timeout. Please retry.")]
+    ValidationTooSmallTokenOutAmount,
+
     #[msg("Transaction Failed: Output token exceeds 50% of the token in pool liquidity. Reduce and retry.")]
     ValidationLiquidityTooBigTokenOutAmount,
 }
